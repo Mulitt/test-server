@@ -32,6 +32,11 @@ app.get('/api/rooms/', async (req, res) => {
     res.send(rooms)
 })
 
+app.get('/api/rooms/all', async (req, res) => {
+    const rooms = await db.getAllRooms()
+    res.send(rooms)
+})
+
 // Filter rooms by status. Admin dashboard calls this
 app.get('/api/rooms/all/:filter', async (req, res) => {
     const { filter } = req.params

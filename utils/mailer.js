@@ -17,7 +17,7 @@ sendVerification = (userEmail, token) => {
         subject: 'EMAIL VERIFICATION FOR BEACH PARADISE RESERVATION',
         html: `
         <h1>Thank you for choosing Beach Paradise</h1>
-        <p>To confirm your reservation <a href="https://main--beach-reservation.onrender.com/api/reservation/verify/${token}">click here.</a> </p>
+        <p>To confirm your reservation <a href="https://beach-reservation.onrender.com/api/reservation/verify/${token}">click here.</a> </p>
         `,
     }
 

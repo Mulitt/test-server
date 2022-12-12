@@ -48,6 +48,11 @@ db.getAvailableCottages = async () => {
     return cottages
 }
 
+db.getAllRooms = async () => {
+    const rooms = await prisma.room.findMany()
+    return rooms
+}
+
 db.filterByStatus = async (filter) => {
     if (filter === 'all') {
         const rooms = await prisma.room.findMany({
