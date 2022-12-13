@@ -62,8 +62,9 @@ app.get('/api/rooms/:id', async (req, res) => {
     res.send(room)
 })
 
-app.get('/api/cottage', async (req, res) => {
-    const cottages = await db.getAvailableCottages()
+app.get('/api/cottage/filter?', async (req, res) => {
+    const { checkin, checkout } = req.query
+    const cottages = await db.getAvailableCottages(checkin, checkout)
     res.send(cottages)
 })
 

@@ -27,15 +27,17 @@ db.getAvailableRooms = async () => {
     return rooms
 }
 
-db.getAvailableCottages = async () => {
-    const today = new Date()
+db.getAvailableCottages = async (checkin, checkout) => {
+    const checkinDate = new Date(checkin)
+    const checkouDate = new Date(checkout)
+    // const today = new Date()
     const cottages = await prisma.cottage.findMany({
         where: {
             NOT: {
                 Booking: {
                     some: {
-                        checkin: { lte: today },
-                        checkout: { gte: today },
+                        checkin: { lte: checkouDate },
+                        checkout: { gte: checkinDate },
                     },
                 },
             },
