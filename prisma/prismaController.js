@@ -272,8 +272,8 @@ db.reserveCottage = async (bookingDetails) => {
 
 db.reserveRoom = async (bookingDetails) => {
     const user = await db.checkUserThenInsert({
-        firstname: bookingDetails.firstName,
-        lastname: bookingDetails.lastName,
+        firstname: bookingDetails.firstname,
+        lastname: bookingDetails.lastname,
         email: bookingDetails.email,
         phone: bookingDetails.phone,
         street: bookingDetails.street,
