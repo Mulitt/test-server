@@ -300,9 +300,9 @@ db.reserveRoom = async (bookingDetails) => {
             adults: adults,
             kids: kids,
             price: computePrice(
-                bookingDetails.arriveDate,
-                bookingDetails.departDate,
-                bookingDetails.roomRate
+                bookingDetails.checkin,
+                bookingDetails.checkout,
+                bookingDetails.rate
             ),
         },
     })
