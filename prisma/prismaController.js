@@ -209,8 +209,8 @@ db.findUserProfileByEmail = async (email) => {
 
 db.reserveCottage = async (bookingDetails) => {
     const user = await db.checkUserThenInsert({
-        firstname: bookingDetails.firstName,
-        lastname: bookingDetails.lastName,
+        firstname: bookingDetails.firstname,
+        lastname: bookingDetails.lastname,
         email: bookingDetails.email,
         phone: bookingDetails.phone,
         street: bookingDetails.street,
@@ -220,12 +220,12 @@ db.reserveCottage = async (bookingDetails) => {
     })
     console.log({ user })
 
-    const { adults, kids } = validateAdultsAndKids({
-        adults: bookingDetails.numOfAdults,
-        kids: bookingDetails.numOfKids,
-    })
+    // const { adults, kids } = validateAdultsAndKids({
+    //     adults: bookingDetails.numOfAdults,
+    //     kids: bookingDetails.numOfKids,
+    // })
 
-    console.log({ kids, adults })
+    // console.log({ kids, adults })
 
     const cottage = await prisma.cottage.findUnique({
         where: {
@@ -238,14 +238,14 @@ db.reserveCottage = async (bookingDetails) => {
             cottageName: cottage.name,
             // roomNumber: parseInt(bookingDetails.roomNumber),
             userId: user.userId,
-            checkin: new Date(bookingDetails.arriveDate),
-            checkout: new Date(bookingDetails.departDate),
+            checkin: new Date(bookingDetails.checkin),
+            checkout: new Date(bookingDetails.checkout),
             // adults: adults,
             // kids: kids,
             price: computePrice(
-                bookingDetails.arriveDate,
-                bookingDetails.departDate,
-                bookingDetails.roomRate
+                bookingDetails.checkin,
+                bookingDetails.checkout,
+                bookingDetails.rate
             ),
         },
     })
