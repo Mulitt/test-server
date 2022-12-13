@@ -129,7 +129,7 @@ app.post('/api/admin/cottage/edit', async (req, res) => {
     const body = req.body
     console.log(body)
     const cottage = await db.editCottage(body)
-    console.log('returning edit', cottage)
+    console.log('returning edited cottage: ', cottage)
     res.send(cottage)
 })
 
@@ -137,7 +137,9 @@ app.post('/api/admin/cottage/edit', async (req, res) => {
 app.post('/api/admin/room/edit', async (req, res) => {
     const body = req.body
     console.log(body)
-    res.end()
+    const room = await db.editRoom(body)
+    console.log('returning edited room: ', room)
+    res.end(room)
 })
 
 // Recieve email verification for reservation

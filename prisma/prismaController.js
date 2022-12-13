@@ -140,6 +140,23 @@ db.addRoom = async (roomDetails) => {
     return room
 }
 
+db.editRoom = async (modifications) => {
+    console.log({ modifications })
+    const room = await prisma.room.update({
+        where: {
+            roomNumber: parseInt(modifications.roomNumber),
+        },
+        data: {
+            type: modifications.type,
+            bed: modifications.bed,
+            status: modifications.status,
+            price: modifications.rate,
+            description: modifications.desc,
+        },
+    })
+    return room
+}
+
 db.addCottage = async (cottageDetails) => {
     console.log({ cottageDetails })
     const cottage = await prisma.cottage.create({
