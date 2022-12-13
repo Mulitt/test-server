@@ -159,6 +159,11 @@ db.editRoom = async (modifications) => {
     return room
 }
 
+db.getAllCottages = async () => {
+    const cottages = await prisma.cottage.findMany()
+    return cottages
+}
+
 db.addCottage = async (cottageDetails) => {
     console.log({ cottageDetails })
     const cottage = await prisma.cottage.create({
