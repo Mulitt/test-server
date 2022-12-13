@@ -148,9 +148,9 @@ db.editRoom = async (modifications) => {
         },
         data: {
             type: modifications.type,
-            bed: modifications.bed,
+            bed: parseInt(modifications.bed),
             status: modifications.status,
-            price: modifications.rate,
+            price: parseInt(modifications.rate),
             description: modifications.desc,
         },
     })
