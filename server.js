@@ -155,9 +155,9 @@ app.get('/api/reservation/verify/:token', async (req, res) => {
     const booking = await db.verifyReservation(token)
 
     if (!booking) {
-        res.redirect('https://main--beach-reservation.netlify.app/404')
+        res.redirect('https://beach-reservation.netlify.app/404')
     } else {
-        res.redirect('https://main--beach-reservation.netlify.app//')
+        res.redirect('https://beach-reservation.netlify.app/')
     }
 })
 
