@@ -139,7 +139,7 @@ app.post('/api/admin/room/edit', async (req, res) => {
     console.log(body)
     const room = await db.editRoom(body)
     console.log('returning edited room: ', room)
-    res.end(room)
+    res.send(room)
 })
 
 // Recieve email verification for reservation
