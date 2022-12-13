@@ -134,7 +134,7 @@ db.addRoom = async (roomDetails) => {
             bed: Number(roomDetails.bed),
             status: roomDetails.status,
             price: Number(roomDetails.rate),
-            description: roomDetails.shortDesc,
+            description: roomDetails.desc,
         },
     })
     return room
