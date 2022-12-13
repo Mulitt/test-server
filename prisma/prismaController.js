@@ -295,8 +295,8 @@ db.reserveRoom = async (bookingDetails) => {
             // cottageId: null,
             roomNumber: parseInt(bookingDetails.roomNumber),
             userId: user.userId,
-            checkin: new Date(bookingDetails.arriveDate),
-            checkout: new Date(bookingDetails.departDate),
+            checkin: new Date(bookingDetails.checkin),
+            checkout: new Date(bookingDetails.checkout),
             adults: adults,
             kids: kids,
             price: computePrice(
