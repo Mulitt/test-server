@@ -1,13 +1,13 @@
-const { computePrice, validateAdultsAndKids } = require('../utils/helper')
-const { sendVerification, sendConfirmation } = require('../utils/mailer')
-const { PrismaClient } = require('@prisma/client')
-const { tokenLifetime } = require('../utils/tokenLifetime')
-const prisma = new PrismaClient()
+const { computePrice, validateAdultsAndKids } = require('../utils/helper');
+const { sendVerification, sendConfirmation } = require('../utils/mailer');
+const { PrismaClient } = require('@prisma/client');
+const { tokenLifetime } = require('../utils/tokenLifetime');
+const prisma = new PrismaClient();
 
-let db = {}
+let db = {};
 
 db.getAvailableRooms = async () => {
-    const today = new Date()
+    const today = new Date();
     const rooms = await prisma.room.findMany({
         where: {
             status: 'operational',
@@ -23,13 +23,13 @@ db.getAvailableRooms = async () => {
         orderBy: {
             roomNumber: 'asc',
         },
-    })
-    return rooms
-}
+    });
+    return rooms;
+};
 
 db.getAvailableCottages = async (checkin, checkout) => {
-    const checkinDate = new Date(checkin)
-    const checkouDate = new Date(checkout)
+    const checkinDate = new Date(checkin);
+    const checkouDate = new Date(checkout);
     // const today = new Date()
     const cottages = await prisma.cottage.findMany({
         where: {
@@ -45,15 +45,15 @@ db.getAvailableCottages = async (checkin, checkout) => {
         orderBy: {
             cottageId: 'asc',
         },
-    })
-    console.log(cottages)
-    return cottages
-}
+    });
+    console.log(cottages);
+    return cottages;
+};
 
 db.getAllRooms = async () => {
-    const rooms = await prisma.room.findMany()
-    return rooms
-}
+    const rooms = await prisma.room.findMany();
+    return rooms;
+};
 
 db.filterByStatus = async (filter) => {
     if (filter === 'all') {
@@ -61,8 +61,8 @@ db.filterByStatus = async (filter) => {
             orderBy: {
                 roomNumber: 'asc',
             },
-        })
-        return rooms
+        });
+        return rooms;
     } else {
         const rooms = await prisma.room.findMany({
             where: {
@@ -71,14 +71,14 @@ db.filterByStatus = async (filter) => {
             orderBy: {
                 roomNumber: 'asc',
             },
-        })
-        return rooms
+        });
+        return rooms;
     }
-}
+};
 
 db.filterByDateAndType = async ({ checkin, checkout, type }) => {
-    const checkinDate = new Date(checkin)
-    const checkoutDate = new Date(checkout)
+    const checkinDate = new Date(checkin);
+    const checkoutDate = new Date(checkout);
     if (type === 'all') {
         const rooms = await prisma.room.findMany({
             where: {
@@ -92,8 +92,8 @@ db.filterByDateAndType = async ({ checkin, checkout, type }) => {
                     },
                 },
             },
-        })
-        return rooms
+        });
+        return rooms;
     } else {
         const rooms = await prisma.room.findMany({
             where: {
@@ -108,28 +108,36 @@ db.filterByDateAndType = async ({ checkin, checkout, type }) => {
                     },
                 },
             },
-        })
-        return rooms
+        });
+        return rooms;
     }
-}
+};
 
 db.getRoom = async (id) => {
     const room = await prisma.room.findUnique({
         where: {
             roomNumber: parseInt(id),
         },
-    })
-    return room
-}
+    });
+    return room;
+};
 
 db.getReservations = async () => {
-    const roomReservations = await prisma.roomBooking.findMany()
-    const cottageReservations = await prisma.cottageBooking.findMany()
-    return { rooms: roomReservations, cottages: cottageReservations }
-}
+    const roomReservations = await prisma.roomBooking.findMany({
+        where: {
+            status: 'verified',
+        },
+    });
+    const cottageReservations = await prisma.cottageBooking.findMany({
+        where: {
+            status: 'verified',
+        },
+    });
+    return { rooms: roomReservations, cottages: cottageReservations };
+};
 
 db.addRoom = async (roomDetails) => {
-    console.log({ roomDetails })
+    console.log({ roomDetails });
     const room = await prisma.room.create({
         data: {
             type: roomDetails.type,
@@ -138,12 +146,12 @@ db.addRoom = async (roomDetails) => {
             price: Number(roomDetails.rate),
             description: roomDetails.desc,
         },
-    })
-    return room
-}
+    });
+    return room;
+};
 
 db.editRoom = async (modifications) => {
-    console.log({ modifications })
+    console.log({ modifications });
     const room = await prisma.room.update({
         where: {
             roomNumber: parseInt(modifications.roomNumber),
@@ -155,29 +163,29 @@ db.editRoom = async (modifications) => {
             price: parseInt(modifications.rate),
             description: modifications.desc,
         },
-    })
-    return room
-}
+    });
+    return room;
+};
 
 db.getAllCottages = async () => {
-    const cottages = await prisma.cottage.findMany()
-    return cottages
-}
+    const cottages = await prisma.cottage.findMany();
+    return cottages;
+};
 
 db.addCottage = async (cottageDetails) => {
-    console.log({ cottageDetails })
+    console.log({ cottageDetails });
     const cottage = await prisma.cottage.create({
         data: {
             name: cottageDetails.name,
             price: parseInt(cottageDetails.rate),
             description: cottageDetails.desc,
         },
-    })
-    return cottage
-}
+    });
+    return cottage;
+};
 
 db.editCottage = async (modifications) => {
-    console.log({ modifications })
+    console.log({ modifications });
     const cottage = await prisma.cottage.update({
         where: {
             cottageId: parseInt(modifications.id),
@@ -187,32 +195,32 @@ db.editCottage = async (modifications) => {
             price: parseInt(modifications.rate),
             description: modifications.desc,
         },
-    })
-    return cottage
+    });
+    return cottage;
     // try {
     // } catch (error) {
     //     return { result: null }
     // }
-}
+};
 
 db.getCottage = async (id) => {
-    console.log({ id })
+    console.log({ id });
     const cottage = await prisma.cottage.findUnique({
         where: {
             cottageId: parseInt(id),
         },
-    })
-    return cottage
-}
+    });
+    return cottage;
+};
 
 db.findUserProfileByEmail = async (email) => {
     const profile = await prisma.profile.findUnique({
         where: {
             email: email,
         },
-    })
-    return profile
-}
+    });
+    return profile;
+};
 
 db.reserveCottage = async (bookingDetails) => {
     const user = await db.checkUserThenInsert({
@@ -224,8 +232,8 @@ db.reserveCottage = async (bookingDetails) => {
         city: bookingDetails.city,
         state: bookingDetails.state,
         postal: bookingDetails.postal,
-    })
-    console.log({ user })
+    });
+    console.log({ user });
 
     // const { adults, kids } = validateAdultsAndKids({
     //     adults: bookingDetails.numOfAdults,
@@ -238,7 +246,7 @@ db.reserveCottage = async (bookingDetails) => {
         where: {
             cottageId: parseInt(bookingDetails.cottageId),
         },
-    })
+    });
 
     const booking = await prisma.cottageBooking.create({
         data: {
@@ -255,7 +263,7 @@ db.reserveCottage = async (bookingDetails) => {
                 bookingDetails.rate
             ),
         },
-    })
+    });
 
     const token = await prisma.token.create({
         data: {
@@ -263,7 +271,7 @@ db.reserveCottage = async (bookingDetails) => {
             bookingId: booking.bookingId,
             type: 'cottage',
         },
-    })
+    });
 
     // ! newly add feature. unifinished
     // const tokenLife = new tokenLifetime()
@@ -272,10 +280,10 @@ db.reserveCottage = async (bookingDetails) => {
     //     db.cancelBooking(token.tokenId, booking.bookingId)
     // })
 
-    console.log({ user, token })
-    sendVerification(user.email, token.tokenId)
-    return { bookingData: booking, userData: user }
-}
+    console.log({ user, token });
+    sendVerification(user.email, token.tokenId);
+    return { bookingData: booking, userData: user };
+};
 
 db.reserveRoom = async (bookingDetails) => {
     const user = await db.checkUserThenInsert({
@@ -287,15 +295,15 @@ db.reserveRoom = async (bookingDetails) => {
         city: bookingDetails.city,
         state: bookingDetails.state,
         postal: bookingDetails.postal,
-    })
-    console.log({ user })
+    });
+    console.log({ user });
 
     const { adults, kids } = validateAdultsAndKids({
         adults: bookingDetails.numOfAdults,
         kids: bookingDetails.numOfKids,
-    })
+    });
 
-    console.log({ kids, adults })
+    console.log({ kids, adults });
 
     const booking = await prisma.roomBooking.create({
         data: {
@@ -312,7 +320,7 @@ db.reserveRoom = async (bookingDetails) => {
                 bookingDetails.rate
             ),
         },
-    })
+    });
 
     const token = await prisma.token.create({
         data: {
@@ -320,7 +328,7 @@ db.reserveRoom = async (bookingDetails) => {
             bookingId: booking.bookingId,
             type: 'room',
         },
-    })
+    });
 
     // ! newly add feature. unifinished
     // const tokenLife = new tokenLifetime()
@@ -329,10 +337,10 @@ db.reserveRoom = async (bookingDetails) => {
     //     db.cancelBooking(token.tokenId, booking.bookingId)
     // })
 
-    console.log({ user, token })
-    sendVerification(user.email, token.tokenId)
-    return { bookingData: booking, userData: user }
-}
+    console.log({ user, token });
+    sendVerification(user.email, token.tokenId);
+    return { bookingData: booking, userData: user };
+};
 
 db.verifyReservation = async (token) => {
     const tokenStoredInDB = await prisma.token.findFirst({
@@ -340,10 +348,10 @@ db.verifyReservation = async (token) => {
             tokenId: token,
             status: 'pending',
         },
-    })
-    if (!tokenStoredInDB) return
+    });
+    if (!tokenStoredInDB) return;
 
-    let booking
+    let booking;
     if (tokenStoredInDB.type === 'room') {
         const userBooking = await prisma.roomBooking.update({
             where: {
@@ -352,8 +360,8 @@ db.verifyReservation = async (token) => {
             data: {
                 status: 'verified',
             },
-        })
-        booking = userBooking
+        });
+        booking = userBooking;
     } else {
         const userBooking = await prisma.cottageBooking.update({
             where: {
@@ -362,8 +370,8 @@ db.verifyReservation = async (token) => {
             data: {
                 status: 'verified',
             },
-        })
-        booking = userBooking
+        });
+        booking = userBooking;
     }
 
     const user = await prisma.user.findUnique({
@@ -373,13 +381,13 @@ db.verifyReservation = async (token) => {
         select: {
             profileId: true,
         },
-    })
+    });
     const userProfile = await prisma.profile.findUnique({
         where: {
             profileId: user.profileId,
         },
-    })
-    sendConfirmation(userProfile.email, booking)
+    });
+    sendConfirmation(userProfile.email, booking);
     await prisma.token.update({
         where: {
             tokenId: token,
@@ -387,9 +395,9 @@ db.verifyReservation = async (token) => {
         data: {
             status: 'verified',
         },
-    })
-    return booking
-}
+    });
+    return booking;
+};
 
 db.checkUserThenInsert = async ({
     firstname,
@@ -401,20 +409,20 @@ db.checkUserThenInsert = async ({
     state,
     postal,
 }) => {
-    const userWithEmail = await db.findUserProfileByEmail(email)
-    console.log({ userWithEmail })
+    const userWithEmail = await db.findUserProfileByEmail(email);
+    console.log({ userWithEmail });
     if (userWithEmail) {
-        console.log('email found')
+        console.log('email found');
         const user = await prisma.user.findUnique({
             where: {
                 profileId: userWithEmail.profileId,
             },
-        })
-        console.log('user with the email found ', user)
-        return { userId: user.userId, email: userWithEmail.email }
+        });
+        console.log('user with the email found ', user);
+        return { userId: user.userId, email: userWithEmail.email };
     }
 
-    console.log('no email found. creating user and profile...')
+    console.log('no email found. creating user and profile...');
     const user = await db.createUserAndProfile({
         firstname,
         lastname,
@@ -424,10 +432,10 @@ db.checkUserThenInsert = async ({
         city,
         state,
         postal,
-    })
-    console.log('newly created user: ', user)
-    return user
-}
+    });
+    console.log('newly created user: ', user);
+    return user;
+};
 
 db.createUserAndProfile = async ({
     firstname,
@@ -448,71 +456,71 @@ db.createUserAndProfile = async ({
             state: state,
             postal: Number(postal),
         },
-    })
-    console.log('profile created ', profile)
+    });
+    console.log('profile created ', profile);
     const user = await prisma.user.create({
         data: {
             firstname: firstname,
             lastname: lastname,
             profileId: profile.profileId,
         },
-    })
-    console.log('user created')
-    return { userId: user.userId, email: profile.email }
-}
+    });
+    console.log('user created');
+    return { userId: user.userId, email: profile.email };
+};
 
 db.cancelBooking = async (token, bookingId) => {
     await prisma.token.delete({
         where: {
             tokenId: token,
         },
-    })
+    });
     const booking = await prisma.roomBooking.delete({
         where: {
             bookingId: bookingId,
         },
-    })
-    return booking
-}
+    });
+    return booking;
+};
 
 db.AdminAuth = async ({ email, password }) => {
-    console.log(email)
+    console.log(email);
     const admin = await prisma.admin.findFirst({
         where: {
             email: email,
         },
-    })
-    if (!admin) return { result: null }
-    if (admin.password !== password) return { result: null }
-    return { result: admin }
-}
+    });
+    if (!admin) return { result: null };
+    if (admin.password !== password) return { result: null };
+    return { result: admin };
+};
 
 db.getDashboardData = async () => {
-    const users = await prisma.user.count()
-    const roomReservations = await prisma.roomBooking.count()
-    const cottageReservations = await prisma.cottageBooking.count()
-    const totalRooms = await prisma.room.count()
-    const totalCottages = await prisma.cottage.count()
+    const users = await prisma.user.count();
+    const roomReservations = await prisma.roomBooking.count();
+    const cottageReservations = await prisma.cottageBooking.count();
+    const totalRooms = await prisma.room.count();
+    const totalCottages = await prisma.cottage.count();
     const pendingRoom = await prisma.roomBooking.count({
         where: {
             status: 'pending',
         },
-    })
+    });
     const pendingCottage = await prisma.cottageBooking.count({
         where: {
             status: 'pending',
         },
-    })
+    });
     const roomIncome = await prisma.roomBooking.aggregate({
         _sum: {
             price: true,
         },
-    })
+    });
     const cottageIncome = await prisma.cottageBooking.aggregate({
         _sum: {
             price: true,
         },
-    })
+    });
     return {
         users,
         roomReservations,
@@ -523,7 +531,7 @@ db.getDashboardData = async () => {
         cottageIncome,
         totalCottages,
         totalRooms,
-    }
-}
+    };
+};
 
-module.exports = db
+module.exports = db;
